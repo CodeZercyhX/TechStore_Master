@@ -38,30 +38,25 @@ exports.updateProduct = async (req, res) => {
   }
 };
 // Eliminar un producto
-exports.deleteProduct = async (req, res) => {
+const deleteProduct = async (req, res) => {
   try {
     const { id } = req.params;
 
-    // Validar si el ID está presente
-    if (!id) {
-      return res.status(400).json({ message: 'Product ID is required' });
-    }
-
-    // Validar si el ID tiene un formato válido
-    const isValidObjectId = /^[a-fA-F0-9]{24}$/.test(id);
-    if (!isValidObjectId) {
-      return res.status(400).json({ message: 'Invalid Product ID format' });
+    // Validar que el ID es válido para MongoDB
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({ message: 'ID de producto no válido' });
     }
 
     // Intentar eliminar el producto
     const deletedProduct = await Product.findByIdAndDelete(id);
+
     if (!deletedProduct) {
-      return res.status(404).json({ message: 'Product not found' });
+      return res.status(404).json({ message: 'Producto no encontrado' });
     }
 
-    res.status(200).json({ message: 'Product deleted successfully', product: deletedProduct });
+    res.status(200).json({ message: 'Producto eliminado exitosamente', product: deletedProduct });
   } catch (error) {
-    console.error('Error deleting product:', error);
-    res.status(500).json({ message: 'Error deleting product', error: error.message });
+    console.error(error);
+    res.status(500).json({ message: 'Error al eliminar el producto', error });
   }
 };
