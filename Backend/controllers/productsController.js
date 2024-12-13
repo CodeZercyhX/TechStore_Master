@@ -1,7 +1,8 @@
+const mongoose = require('mongoose');
 const Product = require('../models/Product');
 
 // Obtener todos los productos
-exports.getProducts = async (req, res) => {
+const getProducts = async (req, res) => {
   try {
     const products = await Product.find(); // Recuperar productos con _id
     res.status(200).json(products); // Enviamos directamente los productos con _id
@@ -12,7 +13,7 @@ exports.getProducts = async (req, res) => {
 };
 
 // Crear un nuevo producto
-exports.createProduct = async (req, res) => {
+const createProduct = async (req, res) => {
   try {
     const product = new Product(req.body);
     const savedProduct = await product.save();
@@ -24,7 +25,7 @@ exports.createProduct = async (req, res) => {
 };
 
 // Editar un producto
-exports.updateProduct = async (req, res) => {
+const updateProduct = async (req, res) => {
   try {
     const { id } = req.params;
     const updatedProduct = await Product.findByIdAndUpdate(id, req.body, { new: true });
@@ -37,7 +38,7 @@ exports.updateProduct = async (req, res) => {
     res.status(500).json({ message: 'Error updating product' });
   }
 };
-// Eliminar un producto
+// Eliminar producto
 const deleteProduct = async (req, res) => {
   try {
     const { id } = req.params;
@@ -59,4 +60,11 @@ const deleteProduct = async (req, res) => {
     console.error(error);
     res.status(500).json({ message: 'Error al eliminar el producto', error });
   }
+};
+
+module.exports = {
+  getProducts,
+  createProduct,
+  updateProduct,
+  deleteProduct,
 };
