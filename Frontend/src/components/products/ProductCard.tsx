@@ -26,11 +26,14 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onEdit, onDel
           <button className="btn btn-outline-secondary btn-sm" onClick={() => onEdit(product)}>
             <i className="bi bi-pencil"></i> Editar
           </button>
-          <button className="btn btn-outline-danger btn-sm" onClick={() => onDelete(product.id)}>
+          <button
+            className="btn btn-outline-danger btn-sm"
+            onClick={() => product._id && onDelete(product._id)} // Validamos si _id existe
+          >
             <i className="bi bi-trash"></i> Eliminar
           </button>
         </div>
       </div>
-    </div>
-  );
+    </div>
+  );
 };
